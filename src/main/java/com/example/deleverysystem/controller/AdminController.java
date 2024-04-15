@@ -1,13 +1,16 @@
 package com.example.deleverysystem.controller;
 
+import com.example.deleverysystem.dto.UserAccountDTO;
 import com.example.deleverysystem.dto.UserInfoDTO;
 import com.example.deleverysystem.entity.UserInfo;
 import com.example.deleverysystem.repository.UserInfoRepository;
 import com.example.deleverysystem.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin")
@@ -21,15 +24,38 @@ public class AdminController {
     @Autowired
     public UserInfoService userInfoService;
 
+    @Autowired
+    public UserAccountDTO userAccountDTO;
+
     @GetMapping("/")
     public String testing(){
         return "ADMIN LEVEL ACCESS";
     }
 
+
+    // TO THE USER ACCOUNT MAPPER
+    private UserAccountDTO mapToUserAccountDTO(UserInfo userInfo) {
+        UserAccountDTO userAccountDTO = new UserAccountDTO();
+        userAccountDTO.setFullName(userInfo.getFullname());
+        userAccountDTO.setEmail(userInfo.getEmail());
+        userAccountDTO.setPhone(userInfo.getPhone());
+        userAccountDTO.setAddress(userInfo.getAddress());
+        // Convert the collection of authorities into a single string
+        String role = userInfo.getUserAccount().getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(", "));
+
+        userAccountDTO.setRole(role);
+
+        return userAccountDTO;
+    }
     @GetMapping("/all")
-        List<UserInfo> findAllUser(){
-            return userInfoService.findAll();
-        }
+    public List<UserAccountDTO> findAllUser() {
+        List<UserInfo> userInfoList = userInfoService.findAll();
+        return userInfoList.stream()
+                .map(this::mapToUserAccountDTO)
+                .collect(Collectors.toList());
+    }
 
 
     @GetMapping("/find/{id}")

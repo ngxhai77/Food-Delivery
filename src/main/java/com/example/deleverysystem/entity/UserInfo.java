@@ -7,6 +7,7 @@ import lombok.*;
 @Entity
 @Data
 
+
 @Table(name = "users")
 public class UserInfo {
 
@@ -41,6 +42,61 @@ public class UserInfo {
 //    private List<Order> orders ;
 
 
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public ApplicationUser getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(ApplicationUser userAccount) {
+        this.userAccount = userAccount;
+    }
+
+    public Ward getWard() {
+        return ward;
+    }
+
+    public void setWard(Ward ward) {
+        this.ward = ward;
+    }
 
     public UserInfo(){
         super();

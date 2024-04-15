@@ -31,9 +31,16 @@ public class ApplicationUser implements UserDetails {
     private Set<Role> authorities;
 
 
+    @OneToOne(mappedBy = "userAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private UserInfo userInfo ;
 
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
 
-
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
 
     public ApplicationUser(){
         super();
@@ -43,6 +50,15 @@ public class ApplicationUser implements UserDetails {
     public ApplicationUser(Integer id , String username ,String password, Set<Role> authorities){
         super();
         this.id = id ;
+        this.authorities =authorities;
+        this.username = username ;
+        this.password = password ;
+
+
+    }
+
+    public ApplicationUser(String username ,String password, Set<Role> authorities){
+        super();
         this.authorities =authorities;
         this.username = username ;
         this.password = password ;

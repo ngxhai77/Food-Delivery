@@ -16,8 +16,6 @@ public class UserInfoService {
 
     public UserInfoService(UserInfoRepository userInfoRepository) {
         this.userInfoRepository = userInfoRepository;
-
-
     }
 
     public List<UserInfo> findAll(){
