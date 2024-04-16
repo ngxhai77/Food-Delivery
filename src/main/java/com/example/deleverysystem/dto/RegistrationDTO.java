@@ -11,6 +11,8 @@ public class RegistrationDTO {
     private String userName ;
     private String password ;
 
+    private String confirmPassword;
+
     public String getFullName() {
         return fullName;
     }
@@ -35,12 +37,22 @@ public class RegistrationDTO {
         this.password = password;
     }
 
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
+
     @Override
     public String toString() {
         return "RegistrationDTO{" +
                 "fullName='" + fullName + '\'' +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
+                ", confirmPassword='" + confirmPassword + '\'' +
                 '}';
     }
 }

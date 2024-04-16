@@ -1,6 +1,7 @@
 package com.example.deleverysystem.Security;
 
 import com.example.deleverysystem.Utils.RSAKeyProperties;
+import com.example.deleverysystem.repository.TokenBlacklistRepository;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -29,14 +30,17 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfiguration {
 
     private final RSAKeyProperties keys ;
+    private final TokenBlacklistRepository tokenBlacklistRepository;
 
-    public SecurityConfiguration(RSAKeyProperties keys) {
+    public SecurityConfiguration(RSAKeyProperties keys, TokenBlacklistRepository tokenBlacklistRepository) {
         this.keys = keys;
+        this.tokenBlacklistRepository = tokenBlacklistRepository;
     }
 
 
@@ -60,6 +64,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .addFilterBefore(new JwtBlacklistFilter(tokenBlacklistRepository),UsernamePasswordAuthenticationFilter.class)
                 .csrf((csrf -> csrf.disable()))
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/auth/**").permitAll();

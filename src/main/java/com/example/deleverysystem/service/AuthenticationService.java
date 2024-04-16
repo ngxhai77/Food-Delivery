@@ -3,9 +3,11 @@ package com.example.deleverysystem.service;
 
 import com.example.deleverysystem.dto.LoginResponseDTO;
 import com.example.deleverysystem.entity.ApplicationUser;
+import com.example.deleverysystem.entity.BlacklistedToken;
 import com.example.deleverysystem.entity.Role;
 import com.example.deleverysystem.entity.UserInfo;
 import com.example.deleverysystem.repository.RoleRepository;
+import com.example.deleverysystem.repository.TokenBlacklistRepository;
 import com.example.deleverysystem.repository.UserInfoRepository;
 import com.example.deleverysystem.repository.UserRepository;
 import jakarta.servlet.http.PushBuilder;
@@ -19,8 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.plaf.PanelUI;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -42,6 +46,9 @@ public class AuthenticationService {
     private TokenService tokenService ;
     @Autowired
     private UserInfoRepository userInfoRepository;
+
+    @Autowired
+    private TokenBlacklistRepository tokenBlacklistRepository;
 
     public ApplicationUser registerUser(String fullname ,String username, String password){
         String endcodedPassword = passwordEncoder.encode(password);
@@ -80,12 +87,26 @@ public class AuthenticationService {
                     new UsernamePasswordAuthenticationToken(username,password)
             );
             String token  = tokenService.generateJwt(auth);
-            return  new LoginResponseDTO(userRepository.findByUsername(username).get(),token);
+            ApplicationUser user = userRepository.findByUsername(username).get();
+            Set<Role> roles = user.getAuthorities().stream()
+                    .map(authority -> new Role(authority.getAuthority()))
+                    .collect(Collectors.toSet());
+            return  new LoginResponseDTO(token,user.getId(),user.getUsername(),user.getPassword(),roles);
+
         }catch(AuthenticationException e){
-            return new LoginResponseDTO(null,"");
+            return new LoginResponseDTO(null,null,null,null,null);
         }
 
 
+
+
+    }
+
+    public void logout(String token) {
+        BlacklistedToken blacklistedToken = new BlacklistedToken();
+        blacklistedToken.setToken(token);
+        blacklistedToken.setExpirationTime(Instant.now().plusSeconds(360)); // replace jwtExpirationTime with your token's lifetime
+        tokenBlacklistRepository.save(blacklistedToken);
     }
 
 }

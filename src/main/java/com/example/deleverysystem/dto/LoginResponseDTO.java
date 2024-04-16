@@ -1,25 +1,35 @@
 package com.example.deleverysystem.dto;
 
 import com.example.deleverysystem.entity.ApplicationUser;
+import com.example.deleverysystem.entity.Role;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Set;
 
 @Data
+@Getter
+@Setter
 public class LoginResponseDTO {
-    private ApplicationUser user;
+
     private String jwt ;
+    private Integer id ;
+    private String username ;
+    private String password;
+    private Set<Role> authorities;
 
-    public LoginResponseDTO(ApplicationUser user,String jwt){
-        this.user = user ;
-        this.jwt= jwt ;
+
+    public LoginResponseDTO(String jwt, Integer id, String username, String password, Set<Role> authorities) {
+
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.authorities = authorities;
+        this.jwt = jwt;
     }
 
-    public ApplicationUser getUser() {
-        return user;
-    }
 
-    public void setUser(ApplicationUser user) {
-        this.user = user;
-    }
 
     public String getJwt() {
         return jwt;
@@ -28,4 +38,8 @@ public class LoginResponseDTO {
     public void setJwt(String jwt) {
         this.jwt = jwt;
     }
+
+
+
+
 }

@@ -6,7 +6,9 @@ import com.example.deleverysystem.dto.LoginResponseDTO;
 import com.example.deleverysystem.dto.RegistrationDTO;
 import com.example.deleverysystem.entity.ApplicationUser;
 import com.example.deleverysystem.service.AuthenticationService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,13 +22,23 @@ public class AuthenticationController {
 
     // FIX DTO
     @PostMapping("/register")
-    public ApplicationUser registerUser(@RequestBody RegistrationDTO body){
+    public ResponseEntity<?> registerUser(@RequestBody RegistrationDTO body){
+        if (!body.getPassword().equals(body.getConfirmPassword())) {
+            return ResponseEntity.badRequest().body("Error: Password and Confirm Password do not match!");
+        }
         ApplicationUser applicationUser =  authenticationService.registerUser(body.getFullName(),body.getUserName(),body.getPassword());
-       return applicationUser;
+        return ResponseEntity.ok().body("User registered successfully!");
     }
     @PostMapping("/login")
     public LoginResponseDTO loginUser(@RequestBody LoginRequestDTO body){
         return authenticationService.loginUser(body.getUserName(),body.getPassword());
 
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        authenticationService.logout(token);
+        return ResponseEntity.ok().build();
     }
 }
