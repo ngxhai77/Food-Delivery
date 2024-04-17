@@ -10,19 +10,16 @@ import java.util.*;
 @Table(name = "user_account")
 public class ApplicationUser implements UserDetails {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id ;
-
 
     @Column(name = "user_name", unique = true)
     private String username ;
 
     @Column(name = "password")
     private String password;
-
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role",

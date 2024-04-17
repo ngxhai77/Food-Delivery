@@ -2,8 +2,10 @@ package com.example.deleverysystem.entity;
 
 
 import jakarta.persistence.*;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
+@Setter
 @Entity
 @Table(name = "roles")
 
@@ -37,15 +39,8 @@ public class Role implements GrantedAuthority {
         return this.authority;
     }
 
-    public void setAuthority(String authority){
-        this.authority = authority ;
-    }
-
     public Integer getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
-    }
 }

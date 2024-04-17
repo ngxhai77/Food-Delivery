@@ -2,9 +2,13 @@ package com.example.deleverysystem.entity;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Instant;
 
+@Setter
+@Getter
 @Entity
 public class BlacklistedToken {
     @Id
@@ -15,31 +19,6 @@ public class BlacklistedToken {
     private String token;
 
     private Instant expirationTime;
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public Instant getExpirationTime() {
-        return expirationTime;
-    }
-
-    public void setExpirationTime(Instant expirationTime) {
-        this.expirationTime = expirationTime;
-    }
 
 
 }

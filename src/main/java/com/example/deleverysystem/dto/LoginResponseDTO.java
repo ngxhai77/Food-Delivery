@@ -13,6 +13,8 @@ import java.util.Set;
 @Setter
 public class LoginResponseDTO {
 
+    @Setter
+    @Getter
     private String jwt ;
     private Integer id ;
     private String username ;
@@ -28,18 +30,6 @@ public class LoginResponseDTO {
         this.authorities = authorities;
         this.jwt = jwt;
     }
-
-
-
-    public String getJwt() {
-        return jwt;
-    }
-
-    public void setJwt(String jwt) {
-        this.jwt = jwt;
-    }
-
-
 
 
 }

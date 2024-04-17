@@ -20,7 +20,6 @@ public class AdminController {
     @Autowired
     UserInfoRepository userInfoRepository;
 
-
     @Autowired
     public UserInfoService userInfoService;
 
@@ -33,7 +32,7 @@ public class AdminController {
     }
 
 
-    // TO THE USER ACCOUNT MAPPER
+    // PUT THIS TO THE USER ACCOUNT MAPPER
     private UserAccountDTO mapToUserAccountDTO(UserInfo userInfo) {
         UserAccountDTO userAccountDTO = new UserAccountDTO();
         userAccountDTO.setFullName(userInfo.getFullname());

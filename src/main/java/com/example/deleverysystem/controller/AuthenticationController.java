@@ -1,6 +1,7 @@
 package com.example.deleverysystem.controller;
 
 
+import com.example.deleverysystem.dto.ChangePasswordDTO;
 import com.example.deleverysystem.dto.LoginRequestDTO;
 import com.example.deleverysystem.dto.LoginResponseDTO;
 import com.example.deleverysystem.dto.RegistrationDTO;
@@ -18,7 +19,6 @@ public class AuthenticationController {
 
     @Autowired
     private AuthenticationService authenticationService ;
-
 
     // FIX DTO
     @PostMapping("/register")
@@ -40,5 +40,15 @@ public class AuthenticationController {
         String token = request.getHeader("Authorization");
         authenticationService.logout(token);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO body) {
+        try {
+            authenticationService.changePassword(body.getUsername(), body.getOldPassword(), body.getNewPassword(), body.getConfirmPassword());
+            return ResponseEntity.ok().body("Password changed successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

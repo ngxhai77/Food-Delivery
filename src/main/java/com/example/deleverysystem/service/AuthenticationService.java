@@ -109,4 +109,21 @@ public class AuthenticationService {
         tokenBlacklistRepository.save(blacklistedToken);
     }
 
+
+    public void changePassword(String username, String oldPassword, String newPassword, String confirmPassword) {
+        ApplicationUser user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new RuntimeException("Old password is incorrect");
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            throw new RuntimeException("New password and confirmation password do not match");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        // save the updated user in the database
+    }
+
 }
