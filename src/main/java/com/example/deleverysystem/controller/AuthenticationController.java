@@ -45,7 +45,7 @@ public class AuthenticationController {
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO body) {
         try {
-            authenticationService.changePassword(body.getUsername(), body.getOldPassword(), body.getNewPassword(), body.getConfirmPassword());
+            authenticationService.changePassword(body.getUserName(), body.getOldPassword(), body.getNewPassword(), body.getConfirmPassword());
             return ResponseEntity.ok().body("Password changed successfully");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

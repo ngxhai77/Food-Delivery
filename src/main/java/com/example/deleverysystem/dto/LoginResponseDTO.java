@@ -17,7 +17,7 @@ public class LoginResponseDTO {
     @Getter
     private String jwt ;
     private Integer id ;
-    private String username ;
+    private String userName ;
     private String password;
     private Set<Role> authorities;
 
@@ -25,7 +25,7 @@ public class LoginResponseDTO {
     public LoginResponseDTO(String jwt, Integer id, String username, String password, Set<Role> authorities) {
 
         this.id = id;
-        this.username = username;
+        this.userName = username;
         this.password = password;
         this.authorities = authorities;
         this.jwt = jwt;

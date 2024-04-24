@@ -33,4 +33,46 @@ public class Ward {
     }
 
 
+    public Integer getWardId() {
+        return wardId;
+    }
+
+    public void setWardId(Integer wardId) {
+        this.wardId = wardId;
+    }
+
+    public String getWardName() {
+        return wardName;
+    }
+
+    public void setWardName(String wardName) {
+        this.wardName = wardName;
+    }
+
+    @Override
+    public String toString() {
+        return "Ward{" +
+                "wardId=" + wardId +
+                ", wardName='" + wardName + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Ward ward = (Ward) o;
+
+        if (wardId != null ? !wardId.equals(ward.wardId) : ward.wardId != null) return false;
+        return wardName != null ? wardName.equals(ward.wardName) : ward.wardName == null;
+    }
+
+
+    // add one to many relationship with restaurants
+
+    // add one to many relationship with users
+
+
+
 }

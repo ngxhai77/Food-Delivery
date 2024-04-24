@@ -1,6 +1,6 @@
 package com.example.deleverysystem.entity;
 
-
+import java.util.List;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,8 +40,8 @@ public class UserInfo {
     @JoinColumn(name = "ward_id")
     private Ward ward ;
 
-//    @OneToMany(mappedBy = "users",cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH}, fetch = FetchType.LAZY)
-//    private List<Order> orders ;
+    @OneToMany(mappedBy = "userInfo",cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    private List<Orders> orders ;
 
 
     public UserInfo(){
@@ -50,7 +50,6 @@ public class UserInfo {
 
 
     public UserInfo( String fullname , String email , String phone , String address){
-        super();
         this.fullname = fullname ;
         this.email = email ;
         this.phone = phone ;

@@ -65,11 +65,9 @@ public class AdminController {
     @PostMapping("/create")
     public String createUser(@RequestBody UserInfoDTO userInfoDTO){
         UserInfo userInfo = new UserInfo();
-        userInfo.setFullname(userInfoDTO.getFullname());
+        userInfo.setFullname(userInfoDTO.getFullName());
         userInfo.setEmail(userInfoDTO.getEmail());
         userInfo.setPhone(userInfoDTO.getPhone());
-        userInfo.setAddress(userInfoDTO.getAddress());
-
 
          userInfoService.create(userInfo);
         return "User Created Successfully .Generated ID is : "+userInfo.getUserId();
@@ -78,7 +76,7 @@ public class AdminController {
     @PutMapping("/update/{id}")
     public String updateUser(@PathVariable("id") Integer id, @RequestBody UserInfoDTO userInfoDTO){
         UserInfo userInfo = new UserInfo();
-        userInfo.setFullname(userInfoDTO.getFullname());
+        userInfo.setFullname(userInfoDTO.getFullName());
         userInfo.setEmail(userInfoDTO.getEmail());
         userInfo.setPhone(userInfoDTO.getPhone());
         userInfo.setAddress(userInfoDTO.getAddress());

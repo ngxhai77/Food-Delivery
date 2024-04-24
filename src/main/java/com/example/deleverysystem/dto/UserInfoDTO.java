@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class UserInfoDTO {
 
     @Column(name = "fullname")
-    private String fullname ;
+    private String fullName ;
 
     @Column(name = "email")
     private String email ;

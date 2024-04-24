@@ -1,10 +1,17 @@
 package com.example.deleverysystem.controller;
 
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.deleverysystem.dto.UserAccountDTO;
+import com.example.deleverysystem.dto.UserInfoDTO;
+import com.example.deleverysystem.entity.UserInfo;
+import com.example.deleverysystem.repository.UserInfoRepository;
+import com.example.deleverysystem.service.UserInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -15,4 +22,76 @@ public class UserController {
     public String testing(){
         return "USER ACCESS LEVEL ";
     }
+
+    @Autowired
+    UserInfoRepository userInfoRepository;
+
+    @Autowired
+    public UserInfoService userInfoService;
+
+    @Autowired
+    public UserAccountDTO userAccountDTO;
+
+
+
+    // PUT THIS TO THE USER ACCOUNT MAPPER
+    private UserAccountDTO mapToUserAccountDTO(UserInfo userInfo) {
+        UserAccountDTO userAccountDTO = new UserAccountDTO();
+        userAccountDTO.setFullName(userInfo.getFullname());
+        userAccountDTO.setEmail(userInfo.getEmail());
+        userAccountDTO.setPhone(userInfo.getPhone());
+        userAccountDTO.setAddress(userInfo.getAddress());
+        // Convert the collection of authorities into a single string
+        String role = userInfo.getUserAccount().getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(", "));
+
+        userAccountDTO.setRole(role);
+
+        return userAccountDTO;
+    }
+    @GetMapping("/all")
+    public List<UserAccountDTO> findAllUser() {
+        List<UserInfo> userInfoList = userInfoService.findAll();
+        return userInfoList.stream()
+                .map(this::mapToUserAccountDTO)
+                .collect(Collectors.toList());
+    }
+
+
+    @GetMapping("/find/{id}")
+    public UserInfo findUserById(@PathVariable("id") Integer id){
+        return userInfoService.findById(id);
+    }
+
+    @PostMapping("/create")
+    public String createUser(@RequestBody UserInfoDTO userInfoDTO){
+        UserInfo userInfo = new UserInfo();
+        userInfo.setFullname(userInfoDTO.getFullName());
+        userInfo.setEmail(userInfoDTO.getEmail());
+        userInfo.setPhone(userInfoDTO.getPhone());
+
+        userInfoService.create(userInfo);
+        return "User Created Successfully .Generated ID is : "+userInfo.getUserId();
+    }
+
+    @PutMapping("/update/{id}")
+    public String updateUser(@PathVariable("id") Integer id, @RequestBody UserInfoDTO userInfoDTO){
+        UserInfo userInfo = new UserInfo();
+        userInfo.setFullname(userInfoDTO.getFullName());
+        userInfo.setEmail(userInfoDTO.getEmail());
+        userInfo.setPhone(userInfoDTO.getPhone());
+        userInfo.setAddress(userInfoDTO.getAddress());
+
+        userInfoService.update(id,userInfo);
+        return "User Updated Successfully .Generated ID is : "+userInfo.getUserId();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteUser(@PathVariable("id") Integer id){
+        userInfoService.deleteById(id);
+        return "User Deleted Successfully .";
+    }
+
+
 }
