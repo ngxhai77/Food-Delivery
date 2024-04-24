@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 public class RegistrationDTO {
 
-    private String fullName;
+    private String displayName;
     private String userName ;
     private String password ;
 
@@ -19,7 +19,7 @@ public class RegistrationDTO {
     @Override
     public String toString() {
         return "RegistrationDTO{" +
-                "fullName='" + fullName + '\'' +
+                "fullName='" + displayName + '\'' +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", confirmPassword='" + confirmPassword + '\'' +
