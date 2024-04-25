@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class UserAccountDTO {
 
-    private String fullName ;
+    private String displayName;
     private String userName ;
     private String password ;
     private String email ;
@@ -23,7 +23,7 @@ public class UserAccountDTO {
     @Override
     public String toString() {
         return "UserAccountDTO{" +
-                "fullName='" + fullName + '\'' +
+                "fullName='" + displayName + '\'' +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +

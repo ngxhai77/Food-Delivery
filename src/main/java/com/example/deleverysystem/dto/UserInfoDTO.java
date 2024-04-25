@@ -10,16 +10,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserInfoDTO {
 
-    @Column(name = "fullname")
-    private String fullName ;
 
-    @Column(name = "email")
+    private String displayName ;
+
+
     private String email ;
 
-    @Column(name = "phone")
+
     private String phone ;
 
-    @Column(name = "address")
     private String address ;
 
 

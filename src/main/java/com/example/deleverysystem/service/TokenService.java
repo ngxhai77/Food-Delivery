@@ -1,5 +1,6 @@
 package com.example.deleverysystem.service;
 
+import com.example.deleverysystem.entity.ApplicationUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +22,7 @@ public class TokenService {
 
     public String generateJwt(Authentication auth){
         Instant now = Instant.now();
+        ApplicationUser user = (ApplicationUser) auth.getPrincipal();
 
         String scope = auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -30,6 +32,8 @@ public class TokenService {
                 .issuedAt(now)
                 .subject(auth.getName())
                 .claim("roles", scope)
+                .claim("id", user.getId()) // add id to the token
+                .claim("username", user.getUsername()) // add username to the token
                 .build();
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

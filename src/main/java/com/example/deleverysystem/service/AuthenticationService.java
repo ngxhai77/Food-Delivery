@@ -50,7 +50,7 @@ public class AuthenticationService {
     @Autowired
     private TokenBlacklistRepository tokenBlacklistRepository;
 
-    public ApplicationUser registerUser(String fullname ,String username, String password){
+    public ApplicationUser registerUser(String displayName ,String username, String password){
         String endcodedPassword = passwordEncoder.encode(password);
         Role userRole = roleRepository.findByAuthority("USER").get();
 
@@ -60,7 +60,7 @@ public class AuthenticationService {
 
         // Create a new UserInfo object and set the fullname
         UserInfo userInfo = new UserInfo();
-        userInfo.setFullname(fullname);
+        userInfo.setDisplayName(displayName);
 
         // Create a new ApplicationUser and set the UserInfo
         ApplicationUser user = new ApplicationUser(username, endcodedPassword, authorities);

@@ -3,6 +3,7 @@ package com.example.deleverysystem.controller;
 import com.example.deleverysystem.dto.UserAccountDTO;
 import com.example.deleverysystem.dto.UserInfoDTO;
 import com.example.deleverysystem.entity.UserInfo;
+import com.example.deleverysystem.mapper.UserAccountMapper;
 import com.example.deleverysystem.repository.UserInfoRepository;
 import com.example.deleverysystem.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,10 @@ public class AdminController {
     @Autowired
     public UserAccountDTO userAccountDTO;
 
+
+    @Autowired
+    public UserAccountMapper userAccountMapper;
+
     @GetMapping("/")
     public String testing(){
         return "ADMIN LEVEL ACCESS";
@@ -33,27 +38,31 @@ public class AdminController {
 
 
     // PUT THIS TO THE USER ACCOUNT MAPPER
-    private UserAccountDTO mapToUserAccountDTO(UserInfo userInfo) {
-        UserAccountDTO userAccountDTO = new UserAccountDTO();
-        userAccountDTO.setFullName(userInfo.getFullname());
-        userAccountDTO.setEmail(userInfo.getEmail());
-        userAccountDTO.setPhone(userInfo.getPhone());
-        userAccountDTO.setAddress(userInfo.getAddress());
-        // Convert the collection of authorities into a single string
-        String role = userInfo.getUserAccount().getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(", "));
-
-        userAccountDTO.setRole(role);
-
-        return userAccountDTO;
-    }
+//    private UserAccountDTO mapToUserAccountDTO(UserInfo userInfo) {
+//        UserAccountDTO userAccountDTO = new UserAccountDTO();
+//        userAccountDTO.setFullName(userInfo.getFullname());
+//        userAccountDTO.setEmail(userInfo.getEmail());
+//        userAccountDTO.setPhone(userInfo.getPhone());
+//        userAccountDTO.setAddress(userInfo.getAddress());
+//        // Convert the collection of authorities into a single string
+//        String role = userInfo.getUserAccount().getAuthorities().stream()
+//                .map(GrantedAuthority::getAuthority)
+//                .collect(Collectors.joining(", "));
+//
+//        userAccountDTO.setRole(role);
+//
+//        return userAccountDTO;
+//    }
     @GetMapping("/all")
     public List<UserAccountDTO> findAllUser() {
         List<UserInfo> userInfoList = userInfoService.findAll();
         return userInfoList.stream()
                 .map(this::mapToUserAccountDTO)
                 .collect(Collectors.toList());
+    }
+
+    private UserAccountDTO mapToUserAccountDTO(UserInfo userInfo) {
+        return userAccountMapper.mapToUserAccountDTO(userInfo);
     }
 
 
@@ -65,7 +74,7 @@ public class AdminController {
     @PostMapping("/create")
     public String createUser(@RequestBody UserInfoDTO userInfoDTO){
         UserInfo userInfo = new UserInfo();
-        userInfo.setFullname(userInfoDTO.getFullName());
+        userInfo.setDisplayName(userInfoDTO.getDisplayName());
         userInfo.setEmail(userInfoDTO.getEmail());
         userInfo.setPhone(userInfoDTO.getPhone());
 
@@ -76,7 +85,7 @@ public class AdminController {
     @PutMapping("/update/{id}")
     public String updateUser(@PathVariable("id") Integer id, @RequestBody UserInfoDTO userInfoDTO){
         UserInfo userInfo = new UserInfo();
-        userInfo.setFullname(userInfoDTO.getFullName());
+        userInfo.setDisplayName(userInfoDTO.getDisplayName());
         userInfo.setEmail(userInfoDTO.getEmail());
         userInfo.setPhone(userInfoDTO.getPhone());
         userInfo.setAddress(userInfoDTO.getAddress());

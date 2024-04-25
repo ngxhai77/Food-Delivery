@@ -3,15 +3,22 @@ package com.example.deleverysystem.controller;
 
 import com.example.deleverysystem.dto.UserAccountDTO;
 import com.example.deleverysystem.dto.UserInfoDTO;
+import com.example.deleverysystem.entity.ApplicationUser;
 import com.example.deleverysystem.entity.UserInfo;
+import com.example.deleverysystem.mapper.UserAccountMapper;
+import com.example.deleverysystem.mapper.UserInfoMapper;
 import com.example.deleverysystem.repository.UserInfoRepository;
+import com.example.deleverysystem.repository.UserRepository;
 import com.example.deleverysystem.service.UserInfoService;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.JWTParser;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -32,53 +39,59 @@ public class UserController {
     @Autowired
     public UserAccountDTO userAccountDTO;
 
+    @Autowired
+    public UserRepository userRepository;
 
-
-    // PUT THIS TO THE USER ACCOUNT MAPPER
+    @Autowired
+    public UserAccountMapper userAccountMapper;
+    @Autowired
+    public UserInfoMapper userInfoMapper;
     private UserAccountDTO mapToUserAccountDTO(UserInfo userInfo) {
-        UserAccountDTO userAccountDTO = new UserAccountDTO();
-        userAccountDTO.setFullName(userInfo.getFullname());
-        userAccountDTO.setEmail(userInfo.getEmail());
-        userAccountDTO.setPhone(userInfo.getPhone());
-        userAccountDTO.setAddress(userInfo.getAddress());
-        // Convert the collection of authorities into a single string
-        String role = userInfo.getUserAccount().getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(", "));
-
-        userAccountDTO.setRole(role);
-
-        return userAccountDTO;
-    }
-    @GetMapping("/all")
-    public List<UserAccountDTO> findAllUser() {
-        List<UserInfo> userInfoList = userInfoService.findAll();
-        return userInfoList.stream()
-                .map(this::mapToUserAccountDTO)
-                .collect(Collectors.toList());
+        return userAccountMapper.mapToUserAccountDTO(userInfo);
     }
 
+    @GetMapping("/userinfo")
+    public ResponseEntity<UserInfoDTO> getUserInfo(HttpServletRequest request) {
+        try {
+            // Extract the token from the Authorization header
+            String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+            String token = authHeader.substring(7);
+            // Parse the token to get the claims
+            JWTClaimsSet claims = JWTParser.parse(token).getJWTClaimsSet();
+
+            // Extract the id and username from the claims
+            Integer id = claims.getIntegerClaim("id");
+            String username = claims.getStringClaim("username");
+
+            // Retrieve the UserInfo from the database
+
+            ApplicationUser user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+            // Check if the username matches
+            if (!username.equals(user.getUsername())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+            //need a DTO to return the user info to the client .
+
+            UserInfoDTO userInfoDTO = userInfoMapper.mapToUserInfoDTO(user.getUserInfo());
+            return ResponseEntity.ok(userInfoDTO);
+        } catch (Exception e) {
+        //    e.printStackTrace();    // Log the error
+            return ResponseEntity.status(   HttpStatus.UNAUTHORIZED).build();
+        }
+    }
 
     @GetMapping("/find/{id}")
     public UserInfo findUserById(@PathVariable("id") Integer id){
         return userInfoService.findById(id);
     }
 
-    @PostMapping("/create")
-    public String createUser(@RequestBody UserInfoDTO userInfoDTO){
-        UserInfo userInfo = new UserInfo();
-        userInfo.setFullname(userInfoDTO.getFullName());
-        userInfo.setEmail(userInfoDTO.getEmail());
-        userInfo.setPhone(userInfoDTO.getPhone());
 
-        userInfoService.create(userInfo);
-        return "User Created Successfully .Generated ID is : "+userInfo.getUserId();
-    }
 
     @PutMapping("/update/{id}")
     public String updateUser(@PathVariable("id") Integer id, @RequestBody UserInfoDTO userInfoDTO){
         UserInfo userInfo = new UserInfo();
-        userInfo.setFullname(userInfoDTO.getFullName());
+        userInfo.setDisplayName(userInfoDTO.getDisplayName());
         userInfo.setEmail(userInfoDTO.getEmail());
         userInfo.setPhone(userInfoDTO.getPhone());
         userInfo.setAddress(userInfoDTO.getAddress());

@@ -3,9 +3,13 @@ package com.example.deleverysystem.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Data
+@Getter
+@Setter
 @Table(name = "restaurants")
 public class Restaurant {
     @Id
@@ -51,7 +55,7 @@ public class Restaurant {
         this.restaurantAddress = restaurantAddress;
         this.restaurantPhone = restaurantPhone;
         this.cuisineType = cuisineType;
-        this.ward = ward;
+         this.ward = ward;
     }
 
 
@@ -63,6 +67,7 @@ public class Restaurant {
     public void setId(Integer id) {
         this.id = id;
     }
+
 
 
 }

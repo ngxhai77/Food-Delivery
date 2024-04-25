@@ -41,7 +41,7 @@ public class UserInfoService {
 
     public UserInfo update(Integer id, UserInfo userInfo){
         UserInfo userInfo1 = userInfoRepository.findById(id).orElseThrow(()->new ItemNotFoundException(id));
-        userInfo1.setFullname(userInfo.getFullname());
+        userInfo1.setDisplayName(userInfo.getDisplayName());
         userInfo1.setEmail(userInfo.getEmail());
         userInfo1.setPhone(userInfo.getPhone());
         userInfo1.setAddress(userInfo.getAddress());

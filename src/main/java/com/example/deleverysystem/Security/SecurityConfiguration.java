@@ -67,7 +67,7 @@ public class SecurityConfiguration {
                 .addFilterBefore(new JwtBlacklistFilter(tokenBlacklistRepository),UsernamePasswordAuthenticationFilter.class)
                 .csrf((csrf -> csrf.disable()))
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/auth/**").permitAll();
+                    auth.requestMatchers("/auth/**","/restaurant/**","/menu/**").permitAll();
                     auth.requestMatchers("/admin/**").hasRole("ADMIN");
                     auth.requestMatchers("/user/**").hasAnyRole("ADMIN","USER");
                     auth.anyRequest().authenticated();

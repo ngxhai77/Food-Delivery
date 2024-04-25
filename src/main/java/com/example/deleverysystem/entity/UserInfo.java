@@ -20,7 +20,7 @@ public class UserInfo {
     private Integer userId;
 
     @Column(name = "fullname")
-    private String fullname ;
+    private String displayName ;
 
     @Column(name = "email")
     private String email ;
@@ -45,12 +45,12 @@ public class UserInfo {
 
 
     public UserInfo(){
-        super();
+
     }
 
 
     public UserInfo( String fullname , String email , String phone , String address){
-        this.fullname = fullname ;
+        this.displayName = fullname ;
         this.email = email ;
         this.phone = phone ;
         this.address = address ;
@@ -60,7 +60,7 @@ public class UserInfo {
     @Override
     public String toString() {
         return "UserInfo{" +
-                ", fullname='" + fullname + '\'' +
+                ", fullname='" + displayName + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
