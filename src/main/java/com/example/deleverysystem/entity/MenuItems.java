@@ -30,5 +30,8 @@ public class MenuItems {
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
+    @Column(name = "category")
+    private String category;
+
 
 }

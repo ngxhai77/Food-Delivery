@@ -1,7 +1,11 @@
 package com.example.deleverysystem.service;
 
 import com.example.deleverysystem.entity.ApplicationUser;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.JWTParser;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.*;
@@ -52,4 +56,18 @@ public class TokenService {
         }
 
     }
+
+    public Integer getIdFromToken(HttpServletRequest request) throws Exception {
+        // Extract the token from the Authorization header
+        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String token = authHeader.substring(7); // remove "Bearer " prefix
+
+        // Parse the token to get the claims
+        JWTClaimsSet claims = JWTParser.parse(token).getJWTClaimsSet();
+
+        // Extract the id from the claims
+        return claims.getIntegerClaim("id");
+    }
+
+
 }

@@ -55,6 +55,10 @@ public class MenuItemService {
         return menuItemRepository.save(menuItem1);
     }
 
+    public List<MenuItems> findAllByCategory(String category){
+        return menuItemRepository.findAllByCategory(category);
+    }
+
 //
 //    public List<MenuItems> findAllByRestaurantId(Integer restaurantId){
 //        return menuItemRepository.findAllByRestaurantId(restaurantId);

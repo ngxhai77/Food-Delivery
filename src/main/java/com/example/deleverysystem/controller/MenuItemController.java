@@ -53,6 +53,12 @@ public class MenuItemController {
         return menuItemService.findById(id);
     }
 
+    @GetMapping("/viewbycategory/{category}")
+    public Iterable<MenuItems> viewItemByCategory(@PathVariable String category) {
+        return menuItemService.findAllByCategory(category);
+    }
+
+
     @GetMapping("/update/{id}")
     public MenuItems updateItem(@PathVariable Integer id, @RequestBody MenuItems items) {
         return menuItemService.update(id, items);
