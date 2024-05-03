@@ -1,7 +1,9 @@
 package com.example.deleverysystem.service;
 
+import com.example.deleverysystem.entity.Category;
 import com.example.deleverysystem.entity.MenuItems;
 import com.example.deleverysystem.exception.ItemNotFoundException;
+import com.example.deleverysystem.repository.CategoryRepository;
 import com.example.deleverysystem.repository.MenuItemsRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +22,10 @@ public class MenuItemService {
     //Xóa một món ăn khỏi menu của một nhà hàng
 
     public final MenuItemsRepository menuItemRepository;
-
-    public MenuItemService(MenuItemsRepository menuItemRepository) {
+    private final CategoryRepository categoryRepository;
+    public MenuItemService(MenuItemsRepository menuItemRepository, CategoryRepository categoryRepository) {
         this.menuItemRepository = menuItemRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<MenuItems> findAll(){
@@ -55,9 +58,17 @@ public class MenuItemService {
         return menuItemRepository.save(menuItem1);
     }
 
-    public List<MenuItems> findAllByCategory(String category){
+
+
+
+    public List<MenuItems> findAllByCategory(String categoryName){
+        Category category = categoryRepository.findByCategoryName(categoryName);
+        if (category == null) {
+            throw new RuntimeException("Category not found: " + categoryName);
+        }
         return menuItemRepository.findAllByCategory(category);
     }
+
 
 //
 //    public List<MenuItems> findAllByRestaurantId(Integer restaurantId){
