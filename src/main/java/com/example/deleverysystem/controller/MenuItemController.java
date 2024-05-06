@@ -64,6 +64,11 @@ public class MenuItemController {
         return menuItemService.update(id, items);
     }
 
+    @GetMapping("/food")
+    public Iterable<MenuItems> viewFood() {
+        return menuItemService.findAll();
+    }
+
 
 
 

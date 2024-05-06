@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.Instant;
 import java.util.stream.Collectors;
@@ -57,7 +58,7 @@ public class TokenService {
 
     }
 
-    public Integer getIdFromToken(HttpServletRequest request) throws Exception {
+    public Integer getIdFromToken(HttpServletRequest request) throws HttpClientErrorException , Exception {
         // Extract the token from the Authorization header
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         String token = authHeader.substring(7); // remove "Bearer " prefix

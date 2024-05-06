@@ -2,9 +2,10 @@ package com.example.deleverysystem.service;
 
 import com.example.deleverysystem.entity.Category;
 import com.example.deleverysystem.entity.MenuItems;
-import com.example.deleverysystem.exception.ItemNotFoundException;
+import com.example.deleverysystem.exception.ErrorMessage;
 import com.example.deleverysystem.repository.CategoryRepository;
 import com.example.deleverysystem.repository.MenuItemsRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class MenuItemService {
     }
 
     public MenuItems findById(Integer id){
-        return menuItemRepository.findById(id).orElseThrow(()->new ItemNotFoundException(id));
+        return menuItemRepository.findById(id).orElseThrow(()->new ErrorMessage(HttpStatus.NOT_FOUND, "Item not found: "));
     }
 
     public void deleteById(Integer id){
@@ -49,7 +50,7 @@ public class MenuItemService {
     }
 
     public MenuItems update(Integer id, MenuItems menuItem){
-        MenuItems menuItem1 = menuItemRepository.findById(id).orElseThrow(()->new ItemNotFoundException(id));
+        MenuItems menuItem1 = menuItemRepository.findById(id).orElseThrow(()->new ErrorMessage(HttpStatus.NOT_FOUND, "Item not found: "));
         menuItem1.setName(menuItem.getName());
         menuItem1.setDescription(menuItem.getDescription());
         menuItem1.setPrice(menuItem.getPrice());

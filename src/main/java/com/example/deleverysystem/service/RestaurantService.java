@@ -1,8 +1,9 @@
 package com.example.deleverysystem.service;
 
 import com.example.deleverysystem.entity.Restaurant;
+import com.example.deleverysystem.exception.ErrorMessage;
 import com.example.deleverysystem.repository.RestaurantRepository;
-import com.example.deleverysystem.exception.ItemNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class RestaurantService {
     }
 
     public Restaurant findById(Integer id){
-        return restaurantRepository.findById(id).orElseThrow(()->new ItemNotFoundException(id));
+        return restaurantRepository.findById(id).orElseThrow(()->new ErrorMessage(HttpStatus.NOT_FOUND, "RESTAURANT not found: "));
     }
 
     public void deleteById(Integer id){
@@ -37,7 +38,7 @@ public class RestaurantService {
     }
 
     public Restaurant update(Integer id, Restaurant restaurant){
-        Restaurant restaurant1 = restaurantRepository.findById(id).orElseThrow(()->new ItemNotFoundException(id));
+        Restaurant restaurant1 = restaurantRepository.findById(id).orElseThrow(()->new ErrorMessage(HttpStatus.NOT_FOUND, "RESTAURANT not found: "));
         restaurant1.setRestaurantName(restaurant.getRestaurantName());
         restaurant1.setRestaurantAddress(restaurant.getRestaurantAddress());
         restaurant1.setRestaurantPhone(restaurant.getRestaurantPhone());

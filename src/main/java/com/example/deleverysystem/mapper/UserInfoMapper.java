@@ -17,4 +17,13 @@ public class UserInfoMapper {
         return userInfoDTO;
     }
 
+    public UserInfo mapToUserInfo(UserInfoDTO userInfoDTO) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setDisplayName(userInfoDTO.getDisplayName());
+        userInfo.setEmail(userInfoDTO.getEmail());
+        userInfo.setPhone(userInfoDTO.getPhone());
+        userInfo.setAddress(userInfoDTO.getAddress());
+        return userInfo;
+    }
+
 }

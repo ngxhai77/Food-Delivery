@@ -1,6 +1,7 @@
 package com.example.deleverysystem.controller;
 
 
+import com.example.deleverysystem.common.ResponseObject;
 import com.example.deleverysystem.dto.UserAccountDTO;
 import com.example.deleverysystem.dto.UserInfoDTO;
 import com.example.deleverysystem.entity.ApplicationUser;
@@ -84,51 +85,22 @@ public class UserController {
             return ResponseEntity.ok(userInfoDTO);
         } catch (Exception e) {
         //    e.printStackTrace();    // Log the error
-            return ResponseEntity.status(   HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
-
-
-    @GetMapping("/find")
-    public UserInfo findUserById(HttpServletRequest request) {
-        try {
-            Integer id = tokenService.getIdFromToken(request);
-            return userInfoService.findById(id);
-        } catch (Exception e) {
-            // handle exception
-            return null;
-        }
-    }
 
 
     @PutMapping("/update")
-    public String updateUser(HttpServletRequest request, @RequestBody UserInfoDTO userInfoDTO) {
-        try {
-            UserInfo userInfo = new UserInfo();
-            userInfo.setDisplayName(userInfoDTO.getDisplayName());
-            userInfo.setEmail(userInfoDTO.getEmail());
-            userInfo.setPhone(userInfoDTO.getPhone());
-            userInfo.setAddress(userInfoDTO.getAddress());
+    public ResponseEntity<String> updateUser(HttpServletRequest request, @RequestBody UserInfoDTO userInfoDTO) {
 
-            userInfoService.update(request, userInfo);
-            return "User Updated Successfully. Generated ID is: " + userInfo.getUserId();
-        } catch (Exception e) {
-            // handle exception
-            return "Error updating user";
-        }
+        return userInfoService.update(request, userInfoMapper.mapToUserInfo(userInfoDTO));
+
     }
 
     @DeleteMapping("/delete")
-    public String deleteUser(HttpServletRequest request) {
-        try {
-            Integer id = tokenService.getIdFromToken(request);
-            userInfoService.deleteById(id);
-            return "User Deleted Successfully.";
-        } catch (Exception e) {
-            logger.error("Error deleting user", e);
-            return "Error deleting user";
-        }
+    public ResponseEntity<String> deleteUser(HttpServletRequest request) {
+        return  userInfoService.deleteU(request);
 
     }
 }

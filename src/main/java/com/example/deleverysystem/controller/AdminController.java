@@ -4,9 +4,12 @@ import com.example.deleverysystem.dto.UserAccountDTO;
 import com.example.deleverysystem.dto.UserInfoDTO;
 import com.example.deleverysystem.entity.UserInfo;
 import com.example.deleverysystem.mapper.UserAccountMapper;
+import com.example.deleverysystem.mapper.UserInfoMapper;
 import com.example.deleverysystem.repository.UserInfoRepository;
 import com.example.deleverysystem.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.Repository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -31,44 +34,32 @@ public class AdminController {
     @Autowired
     public UserAccountMapper userAccountMapper;
 
+    @Autowired
+    public UserInfoMapper userInfoMapper;
+
+
     @GetMapping("/")
     public String testing(){
         return "ADMIN LEVEL ACCESS";
     }
 
 
-    // PUT THIS TO THE USER ACCOUNT MAPPER
-//    private UserAccountDTO mapToUserAccountDTO(UserInfo userInfo) {
-//        UserAccountDTO userAccountDTO = new UserAccountDTO();
-//        userAccountDTO.setFullName(userInfo.getFullname());
-//        userAccountDTO.setEmail(userInfo.getEmail());
-//        userAccountDTO.setPhone(userInfo.getPhone());
-//        userAccountDTO.setAddress(userInfo.getAddress());
-//        // Convert the collection of authorities into a single string
-//        String role = userInfo.getUserAccount().getAuthorities().stream()
-//                .map(GrantedAuthority::getAuthority)
-//                .collect(Collectors.joining(", "));
-//
-//        userAccountDTO.setRole(role);
-//
-//        return userAccountDTO;
-//    }
     @GetMapping("/all")
-    public List<UserAccountDTO> findAllUser() {
+    public ResponseEntity<List<UserAccountDTO>> getAllUser() {
         List<UserInfo> userInfoList = userInfoService.findAll();
-        return userInfoList.stream()
-                .map(this::mapToUserAccountDTO)
-                .collect(Collectors.toList());
+        return ResponseEntity.ok(userInfoList.stream().map(this::mapToUserAccountDTO).collect(Collectors.toList()));
     }
 
-    private UserAccountDTO mapToUserAccountDTO(UserInfo userInfo) {
+     private UserAccountDTO mapToUserAccountDTO(UserInfo userInfo) {
         return userAccountMapper.mapToUserAccountDTO(userInfo);
     }
 
 
     @GetMapping("/find/{id}")
-    public UserInfo findUserById(@PathVariable("id") Integer id){
-        return userInfoService.findById(id);
+    public ResponseEntity<UserInfo> getUserById(@PathVariable("id") Integer id){
+        UserInfo  user =  userInfoService.findById(id);
+            return ResponseEntity.ok(user); // Trả về 200 OK và đối tượng user
+
     }
 
     @PostMapping("/create")
@@ -83,22 +74,16 @@ public class AdminController {
     }
 
     @PutMapping("/update/{id}")
-    public String updateUser(@PathVariable("id") Integer id, @RequestBody UserInfoDTO userInfoDTO){
-        UserInfo userInfo = new UserInfo();
-        userInfo.setDisplayName(userInfoDTO.getDisplayName());
-        userInfo.setEmail(userInfoDTO.getEmail());
-        userInfo.setPhone(userInfoDTO.getPhone());
-        userInfo.setAddress(userInfoDTO.getAddress());
-
-        userInfoService.update(id,userInfo);
-        return "User Updated Successfully .Generated ID is : "+userInfo.getUserId();
+    public ResponseEntity<String> updateUserById(@PathVariable("id") Integer id, @RequestBody UserInfoDTO userInfoDTO){
+        userInfoService.update(id,userInfoMapper.mapToUserInfo(userInfoDTO));
+        return ResponseEntity.ok("User Updated Successfully .");
     }
 
-    @DeleteMapping("/delete/{id}")
-    public String deleteUser(@PathVariable("id") Integer id){
-        userInfoService.deleteById(id);
-        return "User Deleted Successfully .";
-    }
+//    @DeleteMapping("/delete/{id}")    // DELETE METHOD
+//    public String deleteUser(@PathVariable("id") Integer id){
+//        userInfoService.deleteById(id);
+//        return "User Deleted Successfully .";
+//    }
 
 
 

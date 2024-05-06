@@ -12,6 +12,7 @@ import com.example.deleverysystem.repository.UserInfoRepository;
 import com.example.deleverysystem.repository.UserRepository;
 import jakarta.servlet.http.PushBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -51,6 +52,8 @@ public class AuthenticationService {
     private TokenBlacklistRepository tokenBlacklistRepository;
 
     public ApplicationUser registerUser(String displayName ,String username, String password){
+
+
         String endcodedPassword = passwordEncoder.encode(password);
         Role userRole = roleRepository.findByAuthority("USER").get();
 
@@ -64,12 +67,13 @@ public class AuthenticationService {
 
         // Create a new ApplicationUser and set the UserInfo
         ApplicationUser user = new ApplicationUser(username, endcodedPassword, authorities);
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new IllegalArgumentException("Username already exists");
+        }
         user.setUserInfo(userInfo);
 
         // Set the user to the UserInfo
         userInfo.setUserAccount(user);
-
-
 
 
         return userRepository.save(user);
@@ -80,7 +84,7 @@ public class AuthenticationService {
 
 
 
-    public LoginResponseDTO loginUser(String username, String password){
+    public ResponseEntity<LoginResponseDTO>  loginUser(String username, String password){
 
         try {
             Authentication auth  = authenticationManager.authenticate(
@@ -91,10 +95,10 @@ public class AuthenticationService {
             Set<Role> roles = user.getAuthorities().stream()
                     .map(authority -> new Role(authority.getAuthority()))
                     .collect(Collectors.toSet());
-            return  new LoginResponseDTO(token,user.getId(),user.getUsername(),user.getPassword(),roles);
+            return  ResponseEntity.ok(new LoginResponseDTO(token));
 
         }catch(AuthenticationException e){
-            return new LoginResponseDTO(null,null,null,null,null);
+            return ResponseEntity.status(401).build();
         }
 
 

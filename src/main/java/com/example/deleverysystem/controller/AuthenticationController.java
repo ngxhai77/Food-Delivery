@@ -30,7 +30,7 @@ public class AuthenticationController {
         return ResponseEntity.ok().body("User registered successfully!");
     }
     @PostMapping("/login")
-    public LoginResponseDTO loginUser(@RequestBody LoginRequestDTO body){
+    public ResponseEntity loginUser(@RequestBody LoginRequestDTO body){
         return authenticationService.loginUser(body.getUserName(),body.getPassword());
 
     }
@@ -39,7 +39,7 @@ public class AuthenticationController {
     public ResponseEntity<?> logout(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         authenticationService.logout(token);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/change-password")
