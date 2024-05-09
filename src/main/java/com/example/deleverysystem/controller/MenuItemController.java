@@ -1,10 +1,14 @@
 package com.example.deleverysystem.controller;
 
+import com.example.deleverysystem.entity.Category;
 import com.example.deleverysystem.entity.MenuItems;
+import com.example.deleverysystem.service.CategotyService;
 import com.example.deleverysystem.service.MenuItemService;
-import com.example.deleverysystem.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/menu")
@@ -20,6 +24,9 @@ public class MenuItemController {
     @Autowired
     public MenuItemService menuItemService;
 
+    @Autowired
+    public CategotyService categotyService;
+
 
     @GetMapping("/")
     public String testing(){
@@ -27,9 +34,8 @@ public class MenuItemController {
     }
 
     @GetMapping("/create")
-    public MenuItems createItem(@RequestBody MenuItems items) {
+    public ResponseEntity createItem(@RequestBody MenuItems items) {
         return menuItemService.create(items);
-
     }
 
     @GetMapping("/update")
@@ -50,7 +56,7 @@ public class MenuItemController {
 
     @GetMapping("/view/{id}")
     public MenuItems viewItem(@PathVariable Integer id) {
-        return menuItemService.findById(id);
+        return menuItemService.findById(id).getBody();
     }
 
     @GetMapping("/viewbycategory/{category}")
@@ -65,9 +71,18 @@ public class MenuItemController {
     }
 
     @GetMapping("/food")
-    public Iterable<MenuItems> viewFood() {
-        return menuItemService.findAll();
+    public ResponseEntity<List<MenuItems>> viewFood() {
+         List<MenuItems> menuItems = menuItemService.findAll();
+         return ResponseEntity.ok().body(menuItems);
     }
+
+    @GetMapping("/category")
+    public ResponseEntity<List<Category>> viewCategory() {
+        List<Category> categories = categotyService.findAll();
+        return ResponseEntity.ok().body(categories);
+    }
+
+
 
 
 

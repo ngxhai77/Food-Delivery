@@ -70,7 +70,7 @@ public class AdminController {
         userInfo.setPhone(userInfoDTO.getPhone());
 
          userInfoService.create(userInfo);
-        return "User Created Successfully .Generated ID is : "+userInfo.getUserId();
+        return "User Created Successfully .Generated ID is : "+userInfo .getUserId();
     }
 
     @PutMapping("/update/{id}")

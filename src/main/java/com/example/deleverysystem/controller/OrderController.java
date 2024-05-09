@@ -1,8 +1,24 @@
 package com.example.deleverysystem.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import com.example.deleverysystem.dto.OrderRequestDTO;
+import com.example.deleverysystem.entity.Orders;
+import com.example.deleverysystem.service.OrderService;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@RestController
+@RequestMapping("/order")
+@CrossOrigin("*")
 public class OrderController {
+    @Autowired
+    private OrderService orderService;
+
+
+
 
     //Xử lý các yêu cầu liên quan đến đơn hàng như tạo, cập nhật, xóa đơn hàng.
     //Hỗ trợ cho việc xem danh sách đơn hàng, chi tiết đơn hàng.
@@ -25,9 +41,16 @@ public class OrderController {
 
 
 
+
     @GetMapping("/vieworder")
-    public String viewOrder() {
-        return "Order viewed successfully!";
+    public List<Orders> viewOrder() {
+        return orderService.findAll();
+    }
+
+
+    @PostMapping("/createorder")
+    public Orders createOrder(HttpServletRequest request ,@RequestBody OrderRequestDTO orderRequest) throws Exception {
+        return orderService.createOrder(request,orderRequest);
     }
 
     @GetMapping("/cancelorder")
@@ -45,11 +68,6 @@ public class OrderController {
         return "Order details viewed successfully!";
     }
 
-    @GetMapping("/vieworderstatus")
-
-    public String viewOrderStatus() {
-        return "Order status viewed successfully!";
-    }
 
     @GetMapping("/updateorderstatus")
     public String updateOrderStatus() {
@@ -59,11 +77,6 @@ public class OrderController {
     @GetMapping("/vieworderstatushistory")
     public String viewOrderStatusHistory() {
         return "Order status history viewed successfully!";
-    }
-
-    @GetMapping("/vieworderstatusdetails")
-    public String viewOrderStatusDetails() {
-        return "Order status details viewed successfully!";
     }
 
 }

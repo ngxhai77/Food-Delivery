@@ -1,0 +1,70 @@
+package com.example.deleverysystem.service;
+
+import com.example.deleverysystem.dto.OrderItemDTO;
+import com.example.deleverysystem.dto.OrderRequestDTO;
+import com.example.deleverysystem.entity.DeliveryPersonnel;
+import com.example.deleverysystem.entity.OrderItem;
+import com.example.deleverysystem.entity.Orders;
+import com.example.deleverysystem.exception.ErrorMessage;
+import com.example.deleverysystem.repository.*;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Service
+public class OrderService {
+
+    public final OrdersRepository ordersRepository;
+
+    public OrderService(OrdersRepository ordersRepository) {
+        this.ordersRepository = ordersRepository;
+    }
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
+    @Autowired
+    private MenuItemsRepository menuItemRepository;
+
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+    @Autowired
+    private DeliveryPersonnelRepository deliveryPersonRepository;
+    @Autowired
+    private UserInfoRepository userInfoRepository;
+
+    @Autowired
+    private TokenService tokenService;
+
+    public List<Orders> findAll(){
+        return ordersRepository.findAll();
+    }
+
+    public Orders createOrder(HttpServletRequest request ,OrderRequestDTO orderRequest) throws Exception {
+        Orders order = new Orders();
+        Integer id = tokenService.getIdFromToken(request );
+        order.setRestaurant(restaurantRepository.findById(orderRequest.getRestaurantId()).orElseThrow(() -> new ErrorMessage(HttpStatus.NOT_FOUND, "1 not found: ")));
+        order.setDeliveryPersonnel(deliveryPersonRepository.findById(orderRequest.getDeliveryPersonId()).orElseThrow(() -> new ErrorMessage(HttpStatus.NOT_FOUND, "2 not found: ")));
+        order.setDeliveryAddress(orderRequest.getDeliveryAddress());
+        order.setOrderDateTime(LocalDateTime.now());
+        order = ordersRepository.save(order);
+
+        for (OrderItemDTO orderItemRequest : orderRequest.getOrderItems()) {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(order);
+            orderItem.setItem(menuItemRepository.findById(orderItemRequest.getItemId()).orElseThrow(() -> new ErrorMessage(HttpStatus.NOT_FOUND, " 3 not found: ")));
+            orderItem.setQuantity(orderItemRequest.getQuantity());
+            orderItem.setSubtotal(orderItem.getItem().getPrice() * orderItem.getQuantity());
+            orderItemRepository.save(orderItem);
+        }
+
+        return order;
+    }
+
+
+
+}

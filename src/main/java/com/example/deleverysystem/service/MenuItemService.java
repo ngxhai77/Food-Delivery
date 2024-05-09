@@ -6,6 +6,7 @@ import com.example.deleverysystem.exception.ErrorMessage;
 import com.example.deleverysystem.repository.CategoryRepository;
 import com.example.deleverysystem.repository.MenuItemsRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,16 +34,19 @@ public class MenuItemService {
         return menuItemRepository.findAll();
     }
 
-    public MenuItems create(MenuItems menuItem){
-        return menuItemRepository.save(menuItem);
+    public ResponseEntity create(MenuItems menuItem){
+        menuItemRepository.save(menuItem);
+        return ResponseEntity.ok("Item created successfully");
+
     }
 
     public MenuItems save(MenuItems menuItem){
         return menuItemRepository.save(menuItem);
     }
 
-    public MenuItems findById(Integer id){
-        return menuItemRepository.findById(id).orElseThrow(()->new ErrorMessage(HttpStatus.NOT_FOUND, "Item not found: "));
+    public ResponseEntity<MenuItems> findById(Integer id){
+         menuItemRepository.findById(id).orElseThrow(()->new ErrorMessage(HttpStatus.NOT_FOUND, "Item not found: "));
+         return ResponseEntity.ok(menuItemRepository.findById(id).get());
     }
 
     public void deleteById(Integer id){

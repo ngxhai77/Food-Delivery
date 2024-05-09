@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -32,7 +33,7 @@ public class Orders {
 
 
     @Column(name = "orderDateTime")
-    private Date   orderDate ;
+    private LocalDateTime OrderDateTime ;
 
 
     @Column(name = "totalAmount")
@@ -44,7 +45,6 @@ public class Orders {
     @ManyToOne
     @JoinColumn(name = "status_id")
     private Status status;
-
 
 
 
