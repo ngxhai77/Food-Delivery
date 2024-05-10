@@ -79,6 +79,10 @@ public class MenuItemService {
     }
 
 
+    public List<MenuItems> findAllByNameContainingIgnoreCase(String name) {
+        return menuItemRepository.findByNameContainingIgnoreCase(name);
+    }
+
 
 //
 //    public List<MenuItems> findAllByRestaurantId(Integer restaurantId){

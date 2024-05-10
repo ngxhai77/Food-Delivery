@@ -3,10 +3,7 @@ package com.example.deleverysystem.service;
 import com.example.deleverysystem.dto.OrderItemDTO;
 import com.example.deleverysystem.dto.OrderRequestDTO;
 import com.example.deleverysystem.dto.UserInfoDTO;
-import com.example.deleverysystem.entity.ApplicationUser;
-import com.example.deleverysystem.entity.DeliveryPersonnel;
-import com.example.deleverysystem.entity.OrderItem;
-import com.example.deleverysystem.entity.Orders;
+import com.example.deleverysystem.entity.*;
 import com.example.deleverysystem.exception.ErrorMessage;
 import com.example.deleverysystem.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -53,18 +50,18 @@ public class OrderService {
 
     }
 
-//    public List<Orders> findAllByUserInfo(HttpServletRequest request) throws Exception {
-//        Integer id = tokenService.getIdFromToken(request);
-//        ApplicationUser applicationUser = userRepository.findById(id)
-//                .orElseThrow(() -> new ErrorMessage(HttpStatus.NOT_FOUND, "User not found: "));
-//        return ordersRepository.findAllByUserInfo_Id(applicationUser.getUserInfo().getUserId());
-//    }
-
+    public List<Orders> findAllByUserid(HttpServletRequest request) throws Exception {
+        Integer applicationUserId = tokenService.getIdFromToken(request);
+        ApplicationUser applicationUser = userRepository.findById(applicationUserId)
+                .orElseThrow(() -> new ErrorMessage(HttpStatus.NOT_FOUND, "User not found: "));
+        UserInfo userInfo = applicationUser.getUserInfo();
+        return ordersRepository.findAllByUserInfo_UserId(userInfo.getUserId());
+    }
     public String createOrder(HttpServletRequest request ,OrderRequestDTO orderRequest) throws Exception {
         Orders order = new Orders();
         Integer id = tokenService.getIdFromToken(request );
         ApplicationUser applicationUser = userRepository.findById(id) .orElseThrow(() -> new ErrorMessage(HttpStatus.NOT_FOUND, "User not found: "));
-       // order.setUserInfo(applicationUser.getUserInfo());
+        order.setUserInfo(applicationUser.getUserInfo());
         order.setRestaurant(restaurantRepository.findById(orderRequest.getRestaurantId()).orElseThrow(() -> new ErrorMessage(HttpStatus.NOT_FOUND, "1 not found: ")));
         order.setDeliveryPersonnel(deliveryPersonRepository.findById(orderRequest.getDeliveryPersonId()).orElseThrow(() -> new ErrorMessage(HttpStatus.NOT_FOUND, "2 not found: ")));
         order.setDeliveryAddress(orderRequest.getDeliveryAddress());
