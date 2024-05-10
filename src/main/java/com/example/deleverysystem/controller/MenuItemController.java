@@ -82,6 +82,13 @@ public class MenuItemController {
         return ResponseEntity.ok().body(categories);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<MenuItems>> searchItem(@RequestParam String name) {
+        List<MenuItems> menuItems = menuItemService.findAllByName(name);
+        return ResponseEntity.ok().body(menuItems);
+    }
+
+
 
 
 

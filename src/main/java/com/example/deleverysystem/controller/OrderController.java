@@ -19,7 +19,6 @@ public class OrderController {
 
 
 
-
     //Xử lý các yêu cầu liên quan đến đơn hàng như tạo, cập nhật, xóa đơn hàng.
     //Hỗ trợ cho việc xem danh sách đơn hàng, chi tiết đơn hàng.
 
@@ -29,17 +28,6 @@ public class OrderController {
     //Cập nhật đơn hàng
     //Xóa đơn hàng
     //Xem lịch sử đơn hàng
-    //Xem lịch sử đơn hàng theo ngày
-    //Xem lịch sử đơn hàng theo tháng
-    //Xem lịch sử đơn hàng theo năm
-    //Xem lịch sử đơn hàng theo ngày, tháng, năm
-    //Xem lịch sử đơn hàng theo ngày, tháng, năm của một nhà hàng
-    //Xem lịch sử đơn hàng theo ngày, tháng, năm của một khách hàng
-    //Xem lịch sử đơn hàng theo ngày, tháng, năm của một nhân viên giao hàng
-    //Xem lịch sử đơn hàng theo ngày, tháng, năm của một nhân viên quản trị hệ thống
-    //Xem lịch sử đơn hàng theo ngày, tháng, năm của một nhân viên quản lý nhà hàng
-
-
 
 
     @GetMapping("/vieworder")
@@ -49,9 +37,12 @@ public class OrderController {
 
 
     @PostMapping("/createorder")
-    public Orders createOrder(HttpServletRequest request ,@RequestBody OrderRequestDTO orderRequest) throws Exception {
-        return orderService.createOrder(request,orderRequest);
+    public ResponseEntity<String> createOrder(HttpServletRequest request ,@RequestBody OrderRequestDTO orderRequest) throws Exception {
+        orderService.createOrder(request,orderRequest);
+        return ResponseEntity.ok("Order created successfully");
     }
+
+
 
     @GetMapping("/cancelorder")
     public String cancelOrder() {

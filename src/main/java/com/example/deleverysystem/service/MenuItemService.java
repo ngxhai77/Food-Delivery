@@ -74,6 +74,11 @@ public class MenuItemService {
         return menuItemRepository.findAllByCategory(category);
     }
 
+    public List<MenuItems> findAllByName(String name){
+        return menuItemRepository.findAllByName(name);
+    }
+
+
 
 //
 //    public List<MenuItems> findAllByRestaurantId(Integer restaurantId){

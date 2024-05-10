@@ -1,6 +1,7 @@
 package com.example.deleverysystem.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -8,6 +9,7 @@ import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Data
 @Table(name = "orders")
@@ -26,8 +28,8 @@ public class Orders {
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
-    @ManyToOne
-    @JoinColumn(name = "deliveryperson_id")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "deliveryperson_id" )
     private DeliveryPersonnel deliveryPersonnel;
 
 

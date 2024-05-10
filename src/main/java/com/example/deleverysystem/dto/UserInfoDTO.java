@@ -13,9 +13,7 @@ public class UserInfoDTO {
 
     private String displayName ;
 
-
     private String email ;
-
 
     private String phone ;
 

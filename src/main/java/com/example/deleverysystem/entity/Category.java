@@ -15,6 +15,8 @@ public class Category {
     @Column(name = "category_name")
     private String categoryName;
 
+    @Column(name = "imageURL")
+    private String imageURL;
     // Getters and setters
 
 

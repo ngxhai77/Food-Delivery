@@ -2,6 +2,8 @@ package com.example.deleverysystem.service;
 
 import com.example.deleverysystem.dto.OrderItemDTO;
 import com.example.deleverysystem.dto.OrderRequestDTO;
+import com.example.deleverysystem.dto.UserInfoDTO;
+import com.example.deleverysystem.entity.ApplicationUser;
 import com.example.deleverysystem.entity.DeliveryPersonnel;
 import com.example.deleverysystem.entity.OrderItem;
 import com.example.deleverysystem.entity.Orders;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -38,15 +41,30 @@ public class OrderService {
     private UserInfoRepository userInfoRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private TokenService tokenService;
+
+
 
     public List<Orders> findAll(){
         return ordersRepository.findAll();
+
     }
 
-    public Orders createOrder(HttpServletRequest request ,OrderRequestDTO orderRequest) throws Exception {
+    public List<Orders> findAllByUserInfo(HttpServletRequest request) throws Exception {
+        Integer id = tokenService.getIdFromToken(request);
+        ApplicationUser applicationUser = userRepository.findById(id)
+                .orElseThrow(() -> new ErrorMessage(HttpStatus.NOT_FOUND, "User not found: "));
+        return ordersRepository.findAllByUserInfo(applicationUser.getUserInfo().getUserId());
+    }
+
+    public String createOrder(HttpServletRequest request ,OrderRequestDTO orderRequest) throws Exception {
         Orders order = new Orders();
         Integer id = tokenService.getIdFromToken(request );
+        ApplicationUser applicationUser = userRepository.findById(id) .orElseThrow(() -> new ErrorMessage(HttpStatus.NOT_FOUND, "User not found: "));
+       // order.setUserInfo(applicationUser.getUserInfo());
         order.setRestaurant(restaurantRepository.findById(orderRequest.getRestaurantId()).orElseThrow(() -> new ErrorMessage(HttpStatus.NOT_FOUND, "1 not found: ")));
         order.setDeliveryPersonnel(deliveryPersonRepository.findById(orderRequest.getDeliveryPersonId()).orElseThrow(() -> new ErrorMessage(HttpStatus.NOT_FOUND, "2 not found: ")));
         order.setDeliveryAddress(orderRequest.getDeliveryAddress());
@@ -62,7 +80,7 @@ public class OrderService {
             orderItemRepository.save(orderItem);
         }
 
-        return order;
+        return "Order created successfully!";
     }
 
 
