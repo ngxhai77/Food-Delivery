@@ -53,12 +53,12 @@ public class OrderService {
 
     }
 
-    public List<Orders> findAllByUserInfo(HttpServletRequest request) throws Exception {
-        Integer id = tokenService.getIdFromToken(request);
-        ApplicationUser applicationUser = userRepository.findById(id)
-                .orElseThrow(() -> new ErrorMessage(HttpStatus.NOT_FOUND, "User not found: "));
-        return ordersRepository.findAllByUserInfo(applicationUser.getUserInfo().getUserId());
-    }
+//    public List<Orders> findAllByUserInfo(HttpServletRequest request) throws Exception {
+//        Integer id = tokenService.getIdFromToken(request);
+//        ApplicationUser applicationUser = userRepository.findById(id)
+//                .orElseThrow(() -> new ErrorMessage(HttpStatus.NOT_FOUND, "User not found: "));
+//        return ordersRepository.findAllByUserInfo_Id(applicationUser.getUserInfo().getUserId());
+//    }
 
     public String createOrder(HttpServletRequest request ,OrderRequestDTO orderRequest) throws Exception {
         Orders order = new Orders();

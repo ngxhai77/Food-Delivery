@@ -42,6 +42,11 @@ public class OrderController {
         return ResponseEntity.ok("Order created successfully");
     }
 
+//    @GetMapping("/orderHistory")
+//    public List<Orders> orderHistory(HttpServletRequest request) throws Exception {
+//        return orderService.findAllByUserInfo(request);
+//    }
+
 
 
     @GetMapping("/cancelorder")

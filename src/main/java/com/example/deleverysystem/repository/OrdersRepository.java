@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface OrdersRepository extends JpaRepository<Orders, Integer> {
 
-    List<Orders> findAllByUserInfo (Integer id);
+
 }
