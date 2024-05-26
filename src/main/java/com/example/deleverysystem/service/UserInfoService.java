@@ -143,7 +143,20 @@ public class UserInfoService {
         return userInfoRepository.save(userInfo1);
     }
 
+    public Integer getUserIdFromToken(HttpServletRequest request) throws Exception {
+        // Extract the ApplicationUser's id from the token
+        Integer applicationUserId = tokenService.getIdFromToken(request);
 
+        // Get the ApplicationUser by its id
+        ApplicationUser applicationUser = userRepository.findById(applicationUserId)
+                .orElseThrow(() -> new Exception("User not found"));
+
+        // Get the UserInfo associated with the ApplicationUser
+        UserInfo userInfo = applicationUser.getUserInfo();
+
+        // Return the userId of the UserInfo
+        return userInfo.getUserId();
+    }
 
 
 

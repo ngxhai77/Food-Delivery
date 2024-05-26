@@ -11,8 +11,8 @@ import java.util.List;
 public class OrderRequestDTO {
 
     private Integer userId;
-    private Integer restaurantId;
-    private Integer deliveryPersonId;
+//    private Integer restaurantId;
+//    private Integer deliveryPersonId;
     private String deliveryAddress;
     private List<OrderItemDTO> orderItems;
 

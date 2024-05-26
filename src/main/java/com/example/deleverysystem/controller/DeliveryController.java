@@ -18,11 +18,8 @@ public class DeliveryController {
     private DeliveryPersonnelService deliveryPersonnelService;
 
     //Xác nhận giao hàng
-
     //Cập nhật trạng thái giao hàng
-
     //Xem danh sách các đơn hàng đã được giao thành công
-
     //Xem lịch sử giao hàng của một nhân viên giao hàng
 
     @PostMapping("/create")

@@ -16,7 +16,6 @@ import java.util.List;
 public class MenuItemController {
     //Quản lý các thao tác liên quan đến menu món ăn như thêm, sửa, xóa món ăn.
     //Hỗ trợ cho việc xem danh sách menu món ăn của các nhà hàng.
-
     //Xem danh sách menu món ăn của một nhà hàng
     //Thêm món ăn vào menu của một nhà hàng
     //Sửa thông tin một món ăn trong menu của một nhà hàng

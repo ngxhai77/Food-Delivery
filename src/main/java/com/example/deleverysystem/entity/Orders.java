@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
@@ -39,7 +41,7 @@ public class Orders {
 
 
     @Column(name = "totalAmount")
-    private DecimalFormat totalAmount ;
+    private BigDecimal totalAmount ;
 
     @Column(name = "deliveryAddress")
     private String deliveryAddress ;
@@ -48,6 +50,20 @@ public class Orders {
     @JoinColumn(name = "status_id")
     private Status status;
 
+
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OrderItem> orderItems;
+
+    // other fields, getters and setters
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
 
 
 }

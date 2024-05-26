@@ -1,10 +1,12 @@
 package com.example.deleverysystem.controller;
 
 import com.example.deleverysystem.dto.OrderRequestDTO;
+import com.example.deleverysystem.dto.OrderResponseDTO;
 import com.example.deleverysystem.entity.Orders;
 import com.example.deleverysystem.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +33,7 @@ public class OrderController {
 
 
     @GetMapping("/vieworder")
-    public List<Orders> viewOrder() {
+    public List<OrderResponseDTO> viewOrder() {
         return orderService.findAll();
     }
 
@@ -47,6 +49,14 @@ public class OrderController {
         return orderService.findAllByUserid(request);
     }
 
+
+    @PostMapping("/from-cart/{cartId}")
+    //Tạo đơn hàng từ giỏ hàng
+    // lay id tu user id
+    public ResponseEntity<Orders> createOrderFromCart(HttpServletRequest request) throws Exception {
+        Orders order = orderService.createOrderFromCart(request);
+        return new ResponseEntity<>(order, HttpStatus.CREATED);
+    }
 
 
     @GetMapping("/cancelorder")

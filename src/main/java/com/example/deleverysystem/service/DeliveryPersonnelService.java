@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class DeliveryPersonnelService {
 
-//Xử lý các yêu cầu liên quan đến việc quản lý nhân viên giao hàng như thêm, sửa, xóa thông tin nhân viên giao hàng.
+    //Xử lý các yêu cầu liên quan đến việc quản lý nhân viên giao hàng như thêm, sửa, xóa thông tin nhân viên giao hàng.
     //Hỗ trợ cho việc xem lịch sử giao hàng của các đơn hàng.
 
     private final DeliveryPersonnelRepository deliveryPersonnelRepository;
@@ -36,8 +36,6 @@ public class DeliveryPersonnelService {
     public DeliveryPersonnel createDeliveryPersonnel(DeliveryPersonnel deliveryPersonnel){
         return deliveryPersonnelRepository.save(deliveryPersonnel);
     }
-
-
 
 
     public void deleteById(Integer id){

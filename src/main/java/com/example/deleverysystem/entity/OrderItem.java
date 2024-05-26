@@ -3,6 +3,8 @@ package com.example.deleverysystem.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 @Table(name = "orderitems")
@@ -24,7 +26,7 @@ public class OrderItem {
     private Integer quantity;
 
     @Column(name = "subtotal")
-    private Double subtotal;
+    private BigDecimal subtotal;
 
     // Getters and setters
 }
