@@ -13,6 +13,9 @@ public class DeliveryPersonnel {
     @Column(name = "deliveryperson_id")
     private Integer deliveryPersonnelId;
 
+   @Column(name = "user_account_id")
+    private Integer userAccountId ;
+
     @Column(name = "Name")
     private String name;
 

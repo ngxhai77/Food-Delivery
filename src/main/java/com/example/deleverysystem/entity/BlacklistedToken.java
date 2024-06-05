@@ -12,7 +12,7 @@ import java.time.Instant;
 @Entity
 public class BlacklistedToken {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 

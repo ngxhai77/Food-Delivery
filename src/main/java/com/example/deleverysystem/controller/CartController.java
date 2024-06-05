@@ -35,7 +35,8 @@ public class CartController {
     }
 
     @DeleteMapping("/removefromcart")
-    public ResponseEntity<?> removeFromCart(HttpServletRequest request) {
+    public ResponseEntity<?> removeFromCart(HttpServletRequest request, @RequestBody Integer itemId) throws Exception {
+        cartService.removeFromCart(request , itemId);
         return ResponseEntity.ok("Product removed from cart successfully!");
     }
 

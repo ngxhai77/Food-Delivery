@@ -3,6 +3,9 @@ package com.example.deleverysystem.service;
 
 import com.example.deleverysystem.entity.DeliveryPersonnel;
 import com.example.deleverysystem.repository.DeliveryPersonnelRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +23,8 @@ public class DeliveryPersonnelService {
         this.deliveryPersonnelRepository = deliveryPersonnelRepository;
     }
 
+    @Autowired
+    private TokenService tokenService;
 
     public List<DeliveryPersonnel> findAll(){
         return deliveryPersonnelRepository.findAll();
@@ -33,7 +38,10 @@ public class DeliveryPersonnelService {
         return deliveryPersonnelRepository.findById(id).orElse(null);
     }
 
-    public DeliveryPersonnel createDeliveryPersonnel(DeliveryPersonnel deliveryPersonnel){
+
+    public DeliveryPersonnel createDeliveryPersonnel(HttpServletRequest request, DeliveryPersonnel deliveryPersonnel) throws Exception {
+        Integer id = tokenService.getIdFromToken(request );
+        deliveryPersonnel.setUserAccountId(id);
         return deliveryPersonnelRepository.save(deliveryPersonnel);
     }
 
@@ -43,5 +51,20 @@ public class DeliveryPersonnelService {
     }
 
 
+    public Integer getDeliveryPersonIdFromToken(HttpServletRequest request) throws Exception {
+        // Get the id from the token
+        Integer id = tokenService.getIdFromToken(request);
+
+        // Find the DeliveryPersonnel object using the id
+        DeliveryPersonnel deliveryPersonnel = deliveryPersonnelRepository.findById(id).orElse(null);
+
+        // If the DeliveryPersonnel object is not found, throw an exception
+        if (deliveryPersonnel == null) {
+            throw new Exception("DeliveryPersonnel not found");
+        }
+
+        // Return the deliveryperson_id
+        return deliveryPersonnel.getDeliveryPersonnelId();
+    }
 
 }

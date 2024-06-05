@@ -7,10 +7,12 @@ import com.example.deleverysystem.dto.UserInfoDTO;
 import com.example.deleverysystem.entity.*;
 import com.example.deleverysystem.exception.ErrorMessage;
 import com.example.deleverysystem.mapper.OrderItemMapper;
+import com.example.deleverysystem.mapper.UserInfoMapper;
 import com.example.deleverysystem.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +60,11 @@ public class OrderService {
     @Autowired
     private CartService cartService;
 
+    @Autowired
+    private StatusRepository statusRepository;
 
+    @Autowired
+    private UserInfoMapper userInfoMapper;
 
     public List<Orders> findAlls(){
           List<Orders> orders = ordersRepository.findAll();
@@ -109,7 +115,7 @@ public class OrderService {
 
 
     @Transactional
-    public Orders createOrderFromCart(HttpServletRequest request) throws Exception {
+    public Pair<UserInfoDTO, OrderResponseDTO> createOrderFromCart(HttpServletRequest request) throws Exception {
         Integer id  =  cartService.createOrGetCartForUser(request);
         Cart cart = cartRepository.findById(id)
                 .orElseThrow(() ->  new ErrorMessage(HttpStatus.NOT_FOUND, " cart not found"));
@@ -118,7 +124,11 @@ public class OrderService {
         order.setUserInfo(cart.getUser());
         order.setOrderDateTime(LocalDateTime.now());
         order.setDeliveryAddress(cart.getUser().getAddress());
-        order.setStatus(new Status("Pending")); // Assuming 1 is the ID for a default status like "Pending"
+        Status status = statusRepository.findByStatus("Pending");
+        if (status == null) {
+            throw new Exception("Status 'Pending' not found in the database.");
+        }
+        order.setStatus(status); // Correct usage
 
         List<OrderItem> orderItems = new ArrayList<>();
         BigDecimal totalAmount = BigDecimal.ZERO;
@@ -142,7 +152,9 @@ public class OrderService {
         // Remove the cart after the order is created
         cartRepository.delete(cart);
 
-        return order;
+        UserInfoDTO userInfoDTO = userInfoMapper.mapToUserInfoDTO(order.getUserInfo());
+        OrderResponseDTO orderResponseDTO = orderItemMapper.convertToDTO(order);
+        return Pair.of(userInfoDTO, orderResponseDTO);
     }
 
 

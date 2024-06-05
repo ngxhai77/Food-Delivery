@@ -2,10 +2,12 @@ package com.example.deleverysystem.controller;
 
 import com.example.deleverysystem.dto.OrderRequestDTO;
 import com.example.deleverysystem.dto.OrderResponseDTO;
+import com.example.deleverysystem.dto.UserInfoDTO;
 import com.example.deleverysystem.entity.Orders;
 import com.example.deleverysystem.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +20,6 @@ import java.util.List;
 public class OrderController {
     @Autowired
     private OrderService orderService;
-
-
 
     //Xử lý các yêu cầu liên quan đến đơn hàng như tạo, cập nhật, xóa đơn hàng.
     //Hỗ trợ cho việc xem danh sách đơn hàng, chi tiết đơn hàng.
@@ -50,11 +50,9 @@ public class OrderController {
     }
 
 
-    @PostMapping("/from-cart/{cartId}")
-    //Tạo đơn hàng từ giỏ hàng
-    // lay id tu user id
-    public ResponseEntity<Orders> createOrderFromCart(HttpServletRequest request) throws Exception {
-        Orders order = orderService.createOrderFromCart(request);
+    @PostMapping("/from-cart")
+    public ResponseEntity<?> createOrderFromCart(HttpServletRequest request) throws Exception {
+        Pair<UserInfoDTO, OrderResponseDTO> order = orderService.createOrderFromCart(request);
         return new ResponseEntity<>(order, HttpStatus.CREATED);
     }
 
@@ -64,10 +62,6 @@ public class OrderController {
         return "Order cancelled successfully!";
     }
 
-    @GetMapping("/vieworderhistory")
-    public String viewOrderHistory() {
-        return "Order history viewed successfully!";
-    }
 
     @GetMapping("/vieworderdetails")
     public String viewOrderDetails() {
@@ -80,9 +74,5 @@ public class OrderController {
         return "Order status updated successfully!";
     }
 
-    @GetMapping("/vieworderstatushistory")
-    public String viewOrderStatusHistory() {
-        return "Order status history viewed successfully!";
-    }
 
 }

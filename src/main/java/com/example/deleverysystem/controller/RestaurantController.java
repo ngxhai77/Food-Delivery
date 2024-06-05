@@ -59,6 +59,7 @@ public class RestaurantController {
     public Restaurant viewRestaurant(@PathVariable Integer id) {
         return restaurantService.findById(id);
     }
+
     @GetMapping("/viewAll")
     public List<Restaurant> viewAllRestaurant() {
         return restaurantService.findAll();

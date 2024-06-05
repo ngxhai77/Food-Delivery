@@ -3,8 +3,10 @@ package com.example.deleverysystem.mapper;
 
 import com.example.deleverysystem.dto.OrderItemDTO;
 import com.example.deleverysystem.dto.OrderResponseDTO;
+import com.example.deleverysystem.dto.UserInfoDTO;
 import com.example.deleverysystem.entity.OrderItem;
 import com.example.deleverysystem.entity.Orders;
+import com.example.deleverysystem.entity.UserInfo;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

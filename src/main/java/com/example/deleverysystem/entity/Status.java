@@ -53,13 +53,6 @@ public class Status {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Status)) return false;
-        Status status1 = (Status) o;
-        return getStatusId().equals(status1.getStatusId()) && getStatus().equals(status1.getStatus());
-    }
 
     @Override
     public int hashCode() {

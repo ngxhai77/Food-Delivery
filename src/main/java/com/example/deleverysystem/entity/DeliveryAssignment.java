@@ -3,6 +3,7 @@ package com.example.deleverysystem.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -24,7 +25,7 @@ public class DeliveryAssignment {
 
 
     @Column(name = "assignedDateTime")
-    private Date assignedDateTime;
+    private LocalDateTime assignedDateTime;
 
     @ManyToOne
     @JoinColumn(name = "status_id")
